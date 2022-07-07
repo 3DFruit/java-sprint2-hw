@@ -23,7 +23,10 @@ public class Main {
                     break;
                 case "2":
                     //Считать годовой отчет
-                    yearlyReport = new YearlyReport(2021, readFileContentsOrNull("resources/y.2021.csv"));
+                    String data = readFileContentsOrNull("resources/y.2021.csv");
+                    if (data != null) {
+                        yearlyReport = new YearlyReport(2021, data);
+                    }
                     break;
                 case "3":
                     //Сверить отчеты
@@ -92,7 +95,10 @@ public class Main {
     private static void readMonthlyReports(ArrayList<MonthlyReport> reports) {
         reports.clear();
         for (int i = 1; i <= 3; i++) {
-            reports.add(new MonthlyReport(i, readFileContentsOrNull("resources/m.20210" + i + ".csv")));
+            String data = readFileContentsOrNull("resources/m.20210" + i + ".csv");
+            if (data != null) {
+                reports.add(new MonthlyReport(i, data));
+            }
         }
     }
 
@@ -111,7 +117,7 @@ public class Main {
         try {
             return Files.readString(Path.of(path));
         } catch (IOException e) {
-            System.out.println("Невозможно прочитать файл с отчётом по адресу:" + path + ". Возможно, файл не находится в нужной директории.");
+            System.out.println("Невозможно прочитать файл с отчётом по адресу:\t" + path + ". Возможно, файл не находится в нужной директории.");
             return null;
         }
     }
