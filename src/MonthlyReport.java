@@ -24,49 +24,26 @@ public class MonthlyReport {
         }
     }
 
-    public int getSummaryIncome() {
-        int income = 0;
+    public int getSummaryAmount(boolean isExpense) {
+        int amount = 0;
         for (MonthItemData monthItemData : itemData){
-            if (!monthItemData.isExpense) income +=  monthItemData.getAmount();
+            if (monthItemData.isExpense == isExpense) amount +=  monthItemData.getAmount();
         }
-        return income;
-    }
+        return amount;
+    }    
 
-    public int getSummaryExpense() {
-        int expense = 0;
-        for (MonthItemData monthItemData : itemData){
-            if (monthItemData.isExpense) expense +=  monthItemData.getAmount();
-        }
-        return expense;
-    }
-
-    public MonthItemData findMostProfitableItem(){
-        MonthItemData mostProfitableItem = new MonthItemData();
-        int biggestProfit = 0;
+    public MonthItemData findHighestAmountItem(boolean isExpense){
+        MonthItemData highestAmountItem = new MonthItemData();
+        int highestAmount = 0;
         for (MonthItemData item : itemData){
-            if (!item.isExpense){
-                int profit = item.getAmount();
-                if (biggestProfit < profit){
-                    biggestProfit = profit;
-                    mostProfitableItem = item;
+            if (item.isExpense == isExpense){
+                int amount = item.getAmount();
+                if (highestAmount < amount){
+                    highestAmount = amount;
+                    highestAmountItem = item;
                 }
             }
         }
-        return mostProfitableItem;
-    }
-
-    public MonthItemData findMostExpensiveItem(){
-        MonthItemData mostExpensiveItem = new MonthItemData();
-        int biggestExpense = 0;
-        for (MonthItemData item : itemData){
-            if (item.isExpense){
-                int profit = item.getAmount();
-                if (biggestExpense < profit){
-                    biggestExpense = profit;
-                    mostExpensiveItem = item;
-                }
-            }
-        }
-        return mostExpensiveItem;
+        return highestAmountItem;
     }
 }

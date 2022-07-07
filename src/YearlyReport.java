@@ -22,26 +22,15 @@ public class YearlyReport {
         }
     }
 
-    public int getIncomeForMonth(int month){
-        int income = 0;
+    public int getAmountForMonth(int month,  boolean isExpense){
+        int amount = 0;
         for (YearItemData yearItemData : monthData){
-            if (yearItemData.month == month && !yearItemData.isExpense) {
-                income = yearItemData.amount;
+            if (yearItemData.month == month && yearItemData.isExpense == isExpense) {
+                amount = yearItemData.amount;
                 break;
             }
         }
-        return income;
-    }
-
-    public int getExpenseForMonth(int month){
-        int expense = 0;
-        for (YearItemData yearItemData : monthData){
-            if (yearItemData.month == month && yearItemData.isExpense) {
-                expense = yearItemData.amount;
-                break;
-            }
-        }
-        return expense;
+        return amount;
     }
 
     public HashMap<Integer,Integer> getProfitByMonths(){
@@ -61,23 +50,13 @@ public class YearlyReport {
         return profit;
     }
 
-    public double getAverageIncome(){
-        int income = 0;
+    public double getAverageAmount(boolean isExpense){
+        int amount = 0;
         for (YearItemData yearItemData : monthData){
-            if (!yearItemData.isExpense) {
-                income += yearItemData.amount;
+            if (yearItemData.isExpense == isExpense) {
+                amount += yearItemData.amount;
             }
         }
-        return income / 12.0;
-    }
-
-    public double getAverageExpense(){
-        int expense = 0;
-        for (YearItemData yearItemData : monthData){
-            if (yearItemData.isExpense) {
-                expense += yearItemData.amount;
-            }
-        }
-        return expense / 12.0;
+        return amount / (monthData.size()/2.0);
     }
 }

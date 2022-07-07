@@ -14,7 +14,7 @@ public class Main {
         YearlyReport yearlyReport = null;
         while (!menuOption.equals("Выход")) {
             printMenu();
-            menuOption = scanner.nextLine();
+            menuOption = scanner.nextLine().trim();
             //обработка введенных данных
             switch (menuOption) {
                 case "1":
@@ -62,9 +62,9 @@ public class Main {
     private static void printMonthlyReports(ArrayList<MonthlyReport> monthlyReports) {
         for (MonthlyReport monthlyReport : monthlyReports) {
             System.out.println("Отчет за " + convertNumberToMonth(monthlyReport.month) + ":");
-            MonthItemData item = monthlyReport.findMostProfitableItem();
+            MonthItemData item = monthlyReport.findHighestAmountItem(false);
             System.out.println("\tСамый прибыльный товар:\t" + item.itemName + ", доход составил:\t" + item.getAmount() + currencySign);
-            item = monthlyReport.findMostExpensiveItem();
+            item = monthlyReport.findHighestAmountItem(true);
             System.out.println("\tСамая большая трата:\t" + item.itemName + ", трата составила:\t" + item.getAmount() + currencySign);
         }
     }
@@ -76,15 +76,15 @@ public class Main {
         for (Integer month : profit.keySet()){
             System.out.println("\t- " + convertNumberToMonth(month) + ": " + profit.get(month) + currencySign);
         }
-        System.out.println("Средний расход за все месяцы в " + yearlyReport.year + " году составил:\t" + yearlyReport.getAverageExpense() + currencySign);
-        System.out.println("Средний доход за все месяцы в " + yearlyReport.year + " году составил:\t" + yearlyReport.getAverageIncome() + currencySign);
+        System.out.println("Средний расход за все месяцы в " + yearlyReport.year + " году составил:\t" + yearlyReport.getAverageAmount(true) + currencySign);
+        System.out.println("Средний доход за все месяцы в " + yearlyReport.year + " году составил:\t" + yearlyReport.getAverageAmount(false) + currencySign);
     }
 
     private static ArrayList<Integer> compareReportsData(ArrayList<MonthlyReport> monthlyReports, YearlyReport yearlyReport) {
         ArrayList<Integer> problemMonths = new ArrayList<>();
         for (MonthlyReport monthlyReport : monthlyReports){
             int month = monthlyReport.month;
-            if (monthlyReport.getSummaryIncome() != yearlyReport.getIncomeForMonth(month) || monthlyReport.getSummaryExpense() != yearlyReport.getExpenseForMonth(month)) problemMonths.add(month);
+            if (monthlyReport.getSummaryAmount(false) != yearlyReport.getAmountForMonth(month, false) || monthlyReport.getSummaryAmount(true) != yearlyReport.getAmountForMonth(month, false)) problemMonths.add(month);
         }
         return problemMonths;
     }
@@ -96,7 +96,7 @@ public class Main {
         }
     }
 
-    public static void printMenu(){ // вывод меню
+    private static void printMenu(){ // вывод меню
         System.out.println("Что вы хотите сделать?");
         System.out.println("\t1 - Считать все месячные отчеты");
         System.out.println("\t2 - Считать годовой отчет");
@@ -111,7 +111,7 @@ public class Main {
         try {
             return Files.readString(Path.of(path));
         } catch (IOException e) {
-            System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно, файл не находится в нужной директории.");
+            System.out.println("Невозможно прочитать файл с отчётом по адресу:" + path + ". Возможно, файл не находится в нужной директории.");
             return null;
         }
     }
