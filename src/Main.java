@@ -87,7 +87,7 @@ public class Main {
         ArrayList<Integer> problemMonths = new ArrayList<>();
         for (MonthlyReport monthlyReport : monthlyReports){
             int month = monthlyReport.month;
-            if (monthlyReport.getSummaryAmount(false) != yearlyReport.getAmountForMonth(month, false) || monthlyReport.getSummaryAmount(true) != yearlyReport.getAmountForMonth(month, false)) problemMonths.add(month);
+            if (monthlyReport.getSummaryAmount(false) != yearlyReport.getAmountForMonth(month, false) || monthlyReport.getSummaryAmount(true) != yearlyReport.getAmountForMonth(month, true)) problemMonths.add(month);
         }
         return problemMonths;
     }
